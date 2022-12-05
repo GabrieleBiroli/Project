@@ -34,3 +34,4 @@
 
 # Configuration build file
 ./vscode/*
+*.dSYM

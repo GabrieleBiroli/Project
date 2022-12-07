@@ -33,5 +33,6 @@
 !*.*
 
 # Configuration build file
-./vscode/*
+*vscode/*
 *.dSYM
+*build/*

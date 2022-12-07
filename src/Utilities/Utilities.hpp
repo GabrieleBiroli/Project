@@ -34,16 +34,22 @@ class PoolInterface;
 
 class Operation {
 public: 
-    Operation(const std::string &type,
-              const std::string &account,
-              PoolInterface * pool,
+    Operation(const std::string &operation_type,
+              const std::string &account_name,
+              PoolInterface *pool,
               std::unordered_map<Token *, double> input,
               std::unordered_map<Token *, double> output);
-    friend std::ostream& operator << (std::ostream& os, const Operation& ops);
+
+    std::string operation_type() const;
+    std::string account_name() const;
+    std::unordered_map<Token *, double> input() const;
+    std::unordered_map<Token *, double> output() const;
+
+    friend std::ostream & operator<<(std::ostream &os, const Operation &op);
 private:
     std::string operation_type_;
-    std::string account_;
-    PoolInterface * pool_;
+    std::string account_name_;
+    PoolInterface *pool_;
     std::unordered_map<Token *, double> input_;
     std::unordered_map<Token *, double> output_;
 };
@@ -65,21 +71,22 @@ public:
 
     void Deposit(Token *token, double quantity);
 
-    void Trade(PoolInterface *pool, Token *input_token, Token *output_token, double input_quantity);
+    double Trade(PoolInterface *pool, Token *input_token, Token *output_token, double input_quantity);
 
-    void Provide(PoolInterface *pool, std::unordered_map<Token *, double> provided_quantities);
+    double Provide(PoolInterface *pool, std::unordered_map<Token *, double> provided_quantities);
 
-    void Withdraw(PoolInterface *pool, double surrendered_quantity);
+    std::unordered_map<Token *, double> Withdraw(PoolInterface *pool, double surrendered_quantity);
 
-    std::vector<Operation*> GetLedger();
+    std::vector<Operation *> ledger() const;
 
 private:
     Account(const std::string &name) : name_(name), total_value_(0), wallet_() {}
+
     static std::unordered_map<std::string, Account *> existing_accounts_;
     std::string name_;
     double total_value_;
     std::unordered_map<Token *, double> wallet_;
-    std::vector<Operation*> ledger_;
+    std::vector<Operation *> ledger_;
 };
 
 class PoolInterface {
@@ -104,13 +111,20 @@ public:
 
     std::unordered_map<Token *, double> SimulateWithdrawal(double surrendered_pool_token_quantity) const;
     Operation * Withdraw(Account *provider, double surrendered_pool_token_quantity);
+
+    double GetSlippage(Token *input_token, Token *output_token, double input_quantity) const;
+
+    std::vector<Operation *> ledger() const;
 protected:
     virtual double ComputeSwappedQuantity(Token *input_token, Token *output_token, double input_quantity) const = 0;
+    virtual double ComputeInvariant(const std::unordered_map<Token *, double> &quantities) const = 0;
+    virtual double ComputeSpotExchangeRate(Token *input_token, Token *output_token) const;
+    virtual double ComputeSlippage(Token *input_token, Token *output_token, double input_quantity) const;
 private:
     std::unordered_map<Token *, double> quantities_;
     double pool_fee_;
     Token *pool_token_;
-    std::vector<Operation*> ledger_;
+    std::vector<Operation *> ledger_;
 
     bool CheckWallet(Account *account, const std::unordered_map<Token *, double> &quantities) const;
 

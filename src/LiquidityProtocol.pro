@@ -11,18 +11,13 @@ CONFIG += c++17
 SOURCES += \
     main.cpp \
     qtwidget.cpp \
-    ./Utilities/Account.cpp \
-    ./Utilities/Initializer.cpp \
-    ./Utilities/Operation.cpp \
-    ./Utilities/PoolInterface.cpp \
-    ./Utilities/Token.cpp
+    ./Utilities/*.cpp \
+    ./Testing/*.cpp
 
 HEADERS += \
     qtwidget.hpp \
-    ./Utilities/Utilities.hpp \
-    ./Protocols/BalancerPool.hpp \
-    ./Protocols/ConstantSum.hpp \
-    ./Protocols/UniswapV2Pool.hpp
+    ./Utilities/*.hpp \
+    ./Protocols/*.hpp
 
 FORMS += \
     qtwidget.ui

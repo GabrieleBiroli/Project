@@ -150,7 +150,7 @@ double arb_simulation_constantsum(double quantity1, double quantity2, double mar
     
     double total_liquidity = quantity1 + quantity2;
     double tm = total_liquidity*market_exchange_rate;
-    double rhs = (tm)/(m+1);
+    double rhs = (tm)/(market_exchange_rate+1);
     double should_trade = quantity1 - rhs
 
 

@@ -121,3 +121,5 @@ This week I researched new protocols and did a report on Bancor's protocol. In
  Amine and I worked on improving it since it didn't perform well.
  Then we started understanding more about Curve Protocl 
  in order to implement it next week.
+ 
+ Gankdfnaslk
